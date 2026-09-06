@@ -1,12 +1,12 @@
-## Preprocess data, write TAF data tables
+# Prepare data, write CSV data tables
 
-## Before: fdesc.txt, yft.age_length, yft.frq, yft.tag (boot/data),
-##         length.fit (boot/model_results)
-## After:  cpue.csv, fisheries.csv, length_comps.csv, otoliths.csv,
-##         tag_recaptures.csv, tag_releases.csv, weight_comps.csv (data)
+# Before: fdesc.txt, yft.age_length, yft.frq, yft.reg_scaling,
+#         yft.tag (boot/data), length.fit (boot/data/model_results)
+# After:  cpue.csv, fisheries.csv, length_comps.csv, otoliths.csv,
+#         tag_recaptures.csv, tag_releases.csv (data)
 
 library(TAF)
-taf.library(FLR4MFCL)
+suppressMessages(library(FLR4MFCL))
 source("utilities.R")  # reading
 
 mkdir("data")
@@ -18,6 +18,7 @@ oto <- reading("otolith data",
 frq <- reading("catch data", read.MFCLFrq("boot/data/yft.frq"))
 fisheries <- reading("fisheries description",
                      read.table("boot/data/fdesc.txt", fill=TRUE, header=TRUE))
+reg <- reading("regional scaling", readLines("boot/data/yft.reg_scaling"))
 tag <- reading("tagging data", read.MFCLTag("boot/data/yft.tag"))
 
 # Fisheries description
@@ -40,19 +41,25 @@ cpue$season <- (1 + cpue$month) / 3
 cpue$index <- cpue$catch / cpue$effort / 1e6
 cpue <- cpue[c("year", "season", "fishery", "area", "index")]
 
-# Size data
+# Length compositions
 size <- freq(frq)
 size <- size[size$freq != -1,]
-
-# Length compositions
 length.comps <- size[!is.na(size$length),]
 length.comps$season <- (1 + length.comps$month) / 3
 length.comps <- length.comps[c("year", "season", "fishery", "length", "freq")]
 
-# Weight compositions
-weight.comps <- size[!is.na(size$weight),]
-weight.comps$season <- (1 + weight.comps$month) / 3
-weight.comps <- weight.comps[c("year", "season", "fishery", "weight", "freq")]
+# Regional scaling
+# Parse first line
+begyr <- as.integer(strsplit(reg[1], " ")[[1]][1])
+begmon <- as.integer(strsplit(reg[1], " ")[[1]][2])
+endyr <- as.integer(strsplit(reg[1], " ")[[1]][3])
+endmon <- as.integer(strsplit(reg[1], " ")[[1]][4])
+# Construct year-month sequence
+n <- length(reg) - 1L
+yr <- begyr + seq(begmon, by=3L, length=n) %/% 12L
+mon <- seq(begmon, by=3L, length=n) %% 12L
+if(endyr != yr[n] || endmon != mon[n])
+  stop("year-month header does not match number of rows")
 
 # Tag releases and recaptures
 tag.releases <- releases(tag)
@@ -76,6 +83,5 @@ write.taf(fisheries, dir="data")
 write.taf(otoliths, dir="data")
 write.taf(cpue, dir="data")
 write.taf(length.comps, dir="data")
-write.taf(weight.comps, dir="data")
 write.taf(tag.releases, dir="data")
 write.taf(tag.recaptures, dir="data")
