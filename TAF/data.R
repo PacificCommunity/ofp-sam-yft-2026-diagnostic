@@ -7,7 +7,7 @@
 
 library(TAF)
 suppressMessages(library(FLR4MFCL))
-source("utilities.R")  # reading
+source("utilities.R")  # reading, read.MFCLRegScaleLong
 
 mkdir("data")
 
@@ -18,7 +18,8 @@ oto <- reading("otolith data",
 frq <- reading("catch data", read.MFCLFrq("boot/data/yft.frq"))
 fisheries <- reading("fisheries description",
                      read.table("boot/data/fdesc.txt", fill=TRUE, header=TRUE))
-reg <- reading("regional scaling", readLines("boot/data/yft.reg_scaling"))
+reg.scale <- reading("regional scaling",
+                     read.MFCLRegScaleLong("boot/data/yft.reg_scaling"))
 tag <- reading("tagging data", read.MFCLTag("boot/data/yft.tag"))
 
 # Fisheries description
@@ -48,19 +49,6 @@ length.comps <- size[!is.na(size$length),]
 length.comps$season <- (1 + length.comps$month) / 3
 length.comps <- length.comps[c("year", "season", "fishery", "length", "freq")]
 
-# Regional scaling
-# Parse first line
-begyr <- as.integer(strsplit(reg[1], " ")[[1]][1])
-begmon <- as.integer(strsplit(reg[1], " ")[[1]][2])
-endyr <- as.integer(strsplit(reg[1], " ")[[1]][3])
-endmon <- as.integer(strsplit(reg[1], " ")[[1]][4])
-# Construct year-month sequence
-n <- length(reg) - 1L
-yr <- begyr + seq(begmon, by=3L, length=n) %/% 12L
-mon <- seq(begmon, by=3L, length=n) %% 12L
-if(endyr != yr[n] || endmon != mon[n])
-  stop("year-month header does not match number of rows")
-
 # Tag releases and recaptures
 tag.releases <- releases(tag)
 names(tag.releases)[names(tag.releases) == "region"] <- "area"
@@ -83,5 +71,6 @@ write.taf(fisheries, dir="data")
 write.taf(otoliths, dir="data")
 write.taf(cpue, dir="data")
 write.taf(length.comps, dir="data")
+write.taf(reg.scale, dir="data")
 write.taf(tag.releases, dir="data")
 write.taf(tag.recaptures, dir="data")
