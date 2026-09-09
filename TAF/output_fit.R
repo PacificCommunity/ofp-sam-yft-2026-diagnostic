@@ -6,7 +6,7 @@
 #         stats.csv (output)
 
 library(TAF)
-library(FLR4MFCL)
+suppressMessages(library(FLR4MFCL))
 source("utilities.R")  # reading
 
 mkdir("output")
@@ -72,5 +72,5 @@ length.comps <- length.comps[c("year", "season", "fishery", "ess",
 write.taf(cpue, dir="output")
 write.taf(length.comps, dir="output")
 write.taf(likelihoods, dir="output")
-write.taf(params, dir="output")
+write.taf(params, quote=TRUE, dir="output")
 write.taf(stats, dir="output")

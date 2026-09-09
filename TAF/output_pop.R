@@ -6,7 +6,7 @@
 #         summary.csv (output)
 
 library(TAF)
-library(FLR4MFCL)
+suppressMessages(library(FLR4MFCL))
 source("utilities.R")  # reading
 
 mkdir("output")
