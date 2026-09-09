@@ -59,6 +59,7 @@ f.annual.reg <- as.data.frame(seasonSums(fm(rep)))
 f.annual <- rbind(f.annual.reg, f.annual.all)
 names(f.annual)[names(f.annual) == "data"] <- "f"
 f.annual$unit <- f.annual$season <- f.annual$iter <- NULL
+f.annual <- f.annual[c("year", "area", "age", "f")]
 
 # Fishing mortality: adult and juvenile
 p.adult <- mat(par)
