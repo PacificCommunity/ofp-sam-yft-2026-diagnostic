@@ -1,10 +1,10 @@
 # Prepare plots and tables for report
 
 # Before: biology.csv, biomass.csv, catch.csv, f_annual.csv, f_stage.csv,
-#         summary.csv (output)
+#         params.csv, summary.csv (output)
 # After:  biology.csv, f_adult_juvenile_same_free.png,
 #         f_adult_juvenile_same_axes.png, f_last_10_free_axes.png,
-#         f_last_10_same_axes, summary.csv (report)
+#         f_last_10_same_axes, params_on_bounds.csv, summary.csv (report)
 
 library(TAF)
 library(lattice)
@@ -17,6 +17,7 @@ biomass <- read.taf("output/biomass.csv")
 catch <- read.taf("output/catch.csv")
 f.annual <- read.taf("output/f_annual.csv")
 f.stage <- read.taf("output/f_stage.csv")
+params <- read.taf("output/params.csv")
 summary <- read.taf("output/summary.csv")
 
 # Plot biomass
@@ -50,7 +51,7 @@ p <- xyplot(f~year|area, groups=stage, f.stage, type="l", col=1, lty=c(1,3),
 plot(p)
 dev.off()
 
-# Plot fishing mortality by age for the last ten years
+# Plot F by age for the last ten years
 taf.png("f_last_10_same_axes", width=2200, height=1400, res=300)
 f.last.10 <- f.annual[f.annual$year %in% tail(sort(unique(f.annual$year)), 10),]
 f.last.10 <- aggregate(f~age+area, f.last.10, mean)
@@ -70,6 +71,17 @@ p <- xyplot(f~age|area, f.last.10, type="l", lwd=2, grid=TRUE, xlab="Age class",
 plot(p)
 dev.off()
 
+# Parameters on bounds
+params.on.bounds <- params[params$Note == "*",]
+params.on.bounds$Gradient <- params.on.bounds$Note <- NULL
+params.on.bounds <- rnd(params.on.bounds, "Estimate", 5)
+params.on.bounds <- rnd(params.on.bounds, "L_bound", 2)
+lo <- (params.on.bounds$Estimate - params.on.bounds$L_bound)^2 == 0
+up <- (params.on.bounds$Estimate - params.on.bounds$U_bound)^2 == 0
+params.on.bounds$Which <- NA_character_
+params.on.bounds$Which[lo] <- "Lower"
+params.on.bounds$Which[up] <- "Upper"
+
 # Format tables
 biology <- rnd(biology, 2:5, c(1,1,3,3))
 summary <- div(summary, 2:6, 10^c(6,3,3,3,3))
@@ -79,4 +91,5 @@ summary <- format(summary)  # retain trailing zeros
 
 # Write tables
 write.taf(biology, dir="report")
+write.taf(params.on.bounds, quote=TRUE, dir="report")
 write.taf(summary, dir="report")
