@@ -2,8 +2,8 @@
 
 # Before: doitall.sh, mfcl.cfg, yft.age_length, yft.frq, yft.ini,
 #         yft.reg_scaling, yft.tag (boot/data), mfclo64 (boot/software)
-# After:  00.par, 11.par, catch.rep, length.fit, plot-11.par.rep,
-#         test_plot_output, weight.fit (model)
+# After:  00.par, 12.par, catch.rep, indepvar.rpt, length.fit, plot-12.par.rep,
+#         test_plot_output (model)
 
 library(TAF)
 
