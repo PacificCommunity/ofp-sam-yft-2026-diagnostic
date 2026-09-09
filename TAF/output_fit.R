@@ -16,6 +16,7 @@ par <- reading("parameters", read.MFCLPar(finalPar("model")))
 rep <- reading("model estimates", read.MFCLRep(finalRep("model")))
 like <- reading("likelihoods", read.MFCLLikelihood("model/test_plot_output"))
 lenfit <- reading("length fits", read.MFCLLenFit("model/length.fit"))
+indepvar <- reading("indep var", readLines("model/indepvar.rpt"))
 
 # Read fisheries description
 fisheries <- read.taf("data/fisheries.csv")
@@ -28,6 +29,13 @@ start <- file.mtime("model/00.par")
 hours <- file.mtime(finalPar("model")) - file.mtime("model/00.par")
 hours <- hours[[1]]
 stats <- data.frame(npar, objfun, gradient, start, hours)
+
+# Parameters
+indepvar[1] <- paste(indepvar[1], "Note")
+params <- read.table(text=indepvar, header=TRUE, fill=TRUE)
+names(params)[names(params) == "Var_name"] <- "Parameter"
+names(params)[names(params) == "gradient"] <- "Gradient"
+params$Note <- sub("\\*+", "*", params$Note)  # use single asterisk
 
 # Likelihoods
 likelihoods <- summary(like)
@@ -64,4 +72,5 @@ length.comps <- length.comps[c("year", "season", "fishery", "ess",
 write.taf(cpue, dir="output")
 write.taf(length.comps, dir="output")
 write.taf(likelihoods, dir="output")
+write.taf(params, dir="output")
 write.taf(stats, dir="output")
