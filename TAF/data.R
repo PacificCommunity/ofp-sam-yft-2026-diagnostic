@@ -3,7 +3,7 @@
 # Before: fdesc.txt, yft.age_length, yft.frq, yft.reg_scaling,
 #         yft.tag (boot/data), length.fit (boot/data/model_results)
 # After:  cpue.csv, fisheries.csv, length_comps.csv, otoliths.csv,
-#         tag_recaptures.csv, tag_releases.csv (data)
+#         reg_scale.csv, tag_recaptures.csv, tag_releases.csv (data)
 
 library(TAF)
 suppressMessages(library(FLR4MFCL))
