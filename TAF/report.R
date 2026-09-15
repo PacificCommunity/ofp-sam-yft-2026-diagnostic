@@ -43,24 +43,24 @@ dev.off()
 
 # Plot adult and juvenile F
 taf.png("f_adult_juvenile_same_axes", width=2200, height=1400, res=300)
-p1 <- xyplot(f~year|area, groups=stage, f.stage, type="l", col=c(1,8),
-             lwd=2, grid=TRUE, xlab="Year", ylab="Fishing mortality",
-             layout=c(2,3), as.table=TRUE,
+p1 <- xyplot(f~year|area, groups=stage, f.stage, type="l",
+             col=c("darkblue","darkgray"), lwd=2, grid=TRUE, xlab="Year",
+             ylab="Fishing mortality", layout=c(2,3), as.table=TRUE,
              scales=list(y=list(relation="free"), alternating=FALSE, rot=0),
              between=list(x=0.6, y=0.6), ylim=c(0, 1.55), axis=no_ticks_on_top)
 plot(p1)
 dev.off()
 
 taf.png("f_adult_juvenile_free_axes", width=2200, height=1400, res=300)
-p2 <- xyplot(f~year|area, groups=stage, f.stage, type="l", col=c(1,8),
-             lwd=2, grid=TRUE, xlab="Year", ylab="Fishing mortality",
-             layout=c(2,3), as.table=TRUE,
+p2 <- xyplot(f~year|area, groups=stage, f.stage, type="l",
+             col=c("darkblue","darkgray"), lwd=2, grid=TRUE, xlab="Year",
+             ylab="Fishing mortality", layout=c(2,3), as.table=TRUE,
              scales=list(y=list(relation="free"), alternating=FALSE, rot=0),
              between=list(x=0.6, y=0.6), axis=no_ticks_on_top)
 plot(p2)
 dev.off()
 
-taf.png("f_adult_juvenile_together", width=3000, height=3800, res=400)
+taf.png("f_adult_juvenile_together", width=2400, height=3000, res=300)
 grid.arrange(p1, p2)
 dev.off()
 
@@ -85,7 +85,7 @@ p4 <- xyplot(f~age|area, f.last.10, type="l", lwd=2, grid=TRUE, xlab="Age class"
 plot(p4)
 dev.off()
 
-taf.png("f_last_10_together", width=3000, height=3800, res=400)
+taf.png("f_last_10_together", width=2400, height=3000, res=300)
 grid.arrange(p3, p4)
 dev.off()
 
