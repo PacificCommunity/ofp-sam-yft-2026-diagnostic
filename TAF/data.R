@@ -7,7 +7,7 @@
 
 library(TAF)
 suppressMessages(library(FLR4MFCL))
-source("utilities.R")  # reading, read.MFCLRegScaleLong
+source("utilities.R")  # reading
 
 mkdir("data")
 
@@ -19,7 +19,7 @@ frq <- reading("catch data", read.MFCLFrq("boot/data/yft.frq"))
 fisheries <- reading("fisheries description",
                      read.table("boot/data/fdesc.txt", fill=TRUE, header=TRUE))
 reg.scale <- reading("regional scaling",
-                     read.MFCLRegScaleLong("boot/data/yft.reg_scaling"))
+                     read.MFCLRegScale("boot/data/yft.reg_scaling", long=TRUE))
 tag <- reading("tagging data", read.MFCLTag("boot/data/yft.tag"))
 
 # Fisheries description
