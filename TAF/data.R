@@ -32,7 +32,7 @@ otoliths <- otoliths[otoliths$obs > 0,]
 otoliths <- otoliths[rep(seq_len(nrow(otoliths)), otoliths$obs),]
 otoliths$season <- (1 + otoliths$month) / 3
 otoliths$area <- fisheries$area[otoliths$fishery]
-otoliths <- otoliths[c("year", "season", "area", "age", "length")]
+otoliths <- otoliths[c("year", "season", "area", "ess", "age", "length")]
 
 # CPUE data
 cpue <- realisations(frq)
