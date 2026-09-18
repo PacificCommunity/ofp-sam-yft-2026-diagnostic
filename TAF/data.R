@@ -67,10 +67,10 @@ tag.recaptures <- tag.recaptures[
     "rec.fishery", "rec.year", "rec.season", "rec.number")]
 
 # Write TAF tables
-write.taf(fisheries, dir="data")
-write.taf(otoliths, dir="data")
 write.taf(cpue, dir="data")
+write.taf(fisheries, dir="data")
 write.taf(length.comps, dir="data")
+write.taf(otoliths, dir="data")
 write.taf(reg.scale, dir="data")
-write.taf(tag.releases, dir="data")
 write.taf(tag.recaptures, dir="data")
+write.taf(tag.releases, dir="data")
