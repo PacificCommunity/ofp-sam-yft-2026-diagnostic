@@ -4,7 +4,7 @@
 #         params.csv, summary.csv (output)
 # After:  biology.csv, f_adult_juvenile_same_free.png,
 #         f_adult_juvenile_same_axes.png, f_last_10_free_axes.png,
-#         f_last_10_same_axes, params_on_bounds.csv, summary.csv (report)
+#         f_last_10_same_axes.png, params_on_bounds.csv, summary.csv (report)
 
 library(TAF)
 library(lattice)
@@ -73,7 +73,6 @@ p3 <- xyplot(f~age|area, f.last.10, type="l", lwd=2, grid=TRUE, xlab="Age class"
              ylab="Fishing mortality", layout=c(2,3), as.table=TRUE,
              scales=list(y=list(relation="free"), alternating=FALSE, rot=0),
              between=list(x=0.6, y=0.6), ylim=c(0,1.62), axis=no_ticks_on_top)
-
 plot(p3)
 dev.off()
 
