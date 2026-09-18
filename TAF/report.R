@@ -44,20 +44,20 @@ dev.off()
 # Plot adult and juvenile F
 taf.png("f_adult_juvenile_same_axes", width=2200, height=1400, res=300)
 p1 <- xyplot(f~year|area, groups=stage, f.stage, type="l",
-             col=c("darkblue","darkgray"), lwd=2, grid=TRUE, xlab="Year",
+             lwd=2, col=c("darkblue","darkgray"), grid=TRUE, xlab="Year",
              ylab="Fishing mortality", layout=c(2,3), as.table=TRUE,
+             axis=no_ticks_on_top, between=list(x=0.6, y=0.6),
              scales=list(y=list(relation="free"), alternating=FALSE, rot=0),
-             between=list(x=0.6, y=0.6), ylim=lim(f.stage$f, 1.02),
-             axis=no_ticks_on_top)
+             ylim=lim(f.stage$f, 1.02))
 plot(p1)
 dev.off()
 
 taf.png("f_adult_juvenile_free_axes", width=2200, height=1400, res=300)
 p2 <- xyplot(f~year|area, groups=stage, f.stage, type="l",
-             col=c("darkblue","darkgray"), lwd=2, grid=TRUE, xlab="Year",
+             lwd=2, col=c("darkblue","darkgray"), grid=TRUE, xlab="Year",
              ylab="Fishing mortality", layout=c(2,3), as.table=TRUE,
-             scales=list(y=list(relation="free"), alternating=FALSE, rot=0),
-             between=list(x=0.6, y=0.6), axis=no_ticks_on_top)
+             axis=no_ticks_on_top, between=list(x=0.6, y=0.6),
+             scales=list(y=list(relation="free"), alternating=FALSE, rot=0))
 plot(p2)
 dev.off()
 
@@ -70,19 +70,19 @@ f.last.10 <- f.annual[f.annual$year %in% tail(sort(unique(f.annual$year)), 10),]
 f.last.10 <- aggregate(f~age+area, f.last.10, mean)
 
 taf.png("f_last_10_same_axes", width=2200, height=1400, res=300)
-p3 <- xyplot(f~age|area, f.last.10, type="l", lwd=2, grid=TRUE, xlab="Age class",
-             ylab="Fishing mortality", layout=c(2,3), as.table=TRUE,
+p3 <- xyplot(f~age|area, f.last.10, type="l", lwd=2, grid=TRUE,
+             xlab="Age class", ylab="Fishing mortality", layout=c(2,3),
+             as.table=TRUE, axis=no_ticks_on_top, between=list(x=0.6, y=0.6),
              scales=list(y=list(relation="free"), alternating=FALSE, rot=0),
-             between=list(x=0.6, y=0.6), ylim=lim(f.last.10$f, 1.02),
-             axis=no_ticks_on_top)
+             ylim=lim(f.last.10$f, 1.02))
 plot(p3)
 dev.off()
 
 taf.png("f_last_10_free_axes", width=2200, height=1400, res=300)
-p4 <- xyplot(f~age|area, f.last.10, type="l", lwd=2, grid=TRUE, xlab="Age class",
-             ylab="Fishing mortality", layout=c(2,3), as.table=TRUE,
-             scales=list(y=list(relation="free"), alternating=FALSE, rot=0),
-             between=list(x=0.6, y=0.6), axis=no_ticks_on_top)
+p4 <- xyplot(f~age|area, f.last.10, type="l", lwd=2, grid=TRUE,
+             xlab="Age class", ylab="Fishing mortality", layout=c(2,3),
+             as.table=TRUE, axis=no_ticks_on_top, between=list(x=0.6, y=0.6),
+             scales=list(y=list(relation="free"), alternating=FALSE, rot=0))
 plot(p4)
 dev.off()
 
