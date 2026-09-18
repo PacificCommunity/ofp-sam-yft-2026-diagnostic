@@ -8,7 +8,7 @@
 
 library(TAF)
 library(lattice)
-library(gridExtra)  # grid.arrange
+suppressMessages(library(gridExtra))  # grid.arrange
 
 no_ticks_on_top <- function(side, ...)
 {
