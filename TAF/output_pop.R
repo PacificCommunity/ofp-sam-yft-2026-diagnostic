@@ -1,8 +1,8 @@
 # Extract population results, write TAF output tables
 
 # Before: 12.par, catch.rep, plot-12.par.rep, (model), fisheries.csv (data)
-# After:  biology.csv, biomass.csv, catch.csv, f_aggregate.csv, f_annual.csv,
-#         f_season.csv, f_stage.csv, natage.csv, selectivity.csv,
+# After:  batage.csv, biology.csv, biomass.csv, catch.csv, f_aggregate.csv,
+#         f_annual.csv, f_season.csv, f_stage.csv, natage.csv, selectivity.csv,
 #         summary.csv (output)
 
 library(TAF)
@@ -75,6 +75,17 @@ natage$unit <- natage$iter <- NULL
 names(natage)[names(natage) == "data"] <- "n"
 natage <- natage[c("year", "season", "area", "age", "n")]
 
+# Biomass at age
+batage <- natage
+batage$sb <- NA_real_
+for(i in 1:nrow(batage))  # SB[y,s,r,a] = N[y,s,r,a] * W[a] * phi[a]
+{
+  batage$sb[i] <- batage$n[i] *
+    biology$weight[batage$age[i]] / 1000 *
+    biology$maturity[batage$age[i]]
+}
+batage$n <- NULL
+
 # Selectivity
 selectivity <- as.data.frame(sel(rep))
 names(selectivity)[names(selectivity) == "unit"] <- "fishery"
@@ -93,6 +104,7 @@ summary <- data.frame(year=sb$year, rec=rec$data, catch=y$data, tb=tb$data,
                       sb=sb$data, sbf0=sbf0$data, dep=dep$data, f=f$data)
 
 # Write TAF tables
+write.taf(batage, dir="output")
 write.taf(biology, dir="output")
 write.taf(biomass, dir="output")
 write.taf(catch, dir="output")

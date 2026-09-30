@@ -1,14 +1,15 @@
 # Prepare plots and tables for report
 
-# Before: biology.csv, biomass.csv, catch.csv, f_annual.csv, f_stage.csv,
-#         params.csv, summary.csv (output)
-# After:  biology.csv, f_adult_juvenile_same_free.png,
+# Before: batage.csv, biology.csv, biomass.csv, catch.csv, f_annual.csv,
+#         f_stage.csv, params.csv, summary.csv (output)
+# After:  batage.png, biology.csv, f_adult_juvenile_same_free.png,
 #         f_adult_juvenile_same_axes.png, f_last_10_free_axes.png,
 #         f_last_10_same_axes.png, params_on_bounds.csv, summary.csv (report)
 
 library(TAF)
 library(lattice)
 suppressMessages(library(gridExtra))  # grid.arrange
+suppressMessages(library(ggplot2))
 
 no_ticks_on_top <- function(side, ...)
 {
@@ -19,6 +20,7 @@ no_ticks_on_top <- function(side, ...)
 mkdir("report")
 
 # Read tables
+batage <- read.taf("output/batage.csv")
 biology <- read.taf("output/biology.csv")
 biomass <- read.taf("output/biomass.csv")
 catch <- read.taf("output/catch.csv")
@@ -27,7 +29,22 @@ f.stage <- read.taf("output/f_stage.csv")
 params <- read.taf("output/params.csv")
 summary <- read.taf("output/summary.csv")
 
-# Plot biomass
+# Plot biomass age distribution and time series
+taf.png("batage", width=1600, height=2000)
+sbfinal <- aggregate(sb~area+age, batage, mean, subset=year==max(year))
+ggplot(sbfinal, aes(factor(age), sb/1e3)) +
+  geom_col(fill="steelblue") +
+  facet_wrap(~paste("Region", area), ncol=1,
+             axes="all_x", axis.labels="margins") +
+  labs(x="Age (quarters)", y="Spawning potential in terminal year (1000 t)") +
+  theme_bw() +
+  theme(axis.title.x=element_text(margin=margin(t=10, b=10)),
+        axis.title.y=element_text(margin=margin(l=10, r=10)),
+        plot.margin=margin(t=10, r=10),
+        strip.text=element_text(size=10),
+        panel.spacing.y=unit(8, "pt"))
+dev.off()
+
 taf.png("biomass")
 sb <- aggregate(sb~year+area, biomass, mean)
 sb$sb <- sb$sb / 1000
